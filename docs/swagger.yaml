@@ -1,0 +1,163 @@
+basePath: /
+definitions:
+  models.AddBook:
+    description: same as book but without id
+    properties:
+      author:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  models.Book:
+    description: Book information with book id and name description and author
+    properties:
+      author:
+        type: string
+      bookId:
+        type: integer
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: THIS SIMPLE TEST
+  termsOfService: http://swagger.io/terms/
+  title: SWAGGER REST API BACKEND 0.1
+  version: "0.1"
+paths:
+  /api/books/{id}:
+    delete:
+      description: Удаляет книгу по айди
+      parameters:
+      - description: Book id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Error while deleting book or Missing book ID
+          schema:
+            type: string
+        "500":
+          description: error message
+          schema:
+            type: string
+      summary: Удалить книгу
+      tags:
+      - books
+    put:
+      consumes:
+      - application/json
+      description: Обновляет книгу по айди
+      parameters:
+      - description: Update book
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/models.AddBook'
+      - description: Book id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AddBook'
+        "400":
+          description: Failed to decode book data or Missing book ID
+          schema:
+            type: string
+        "500":
+          description: Failed to encode book data or error message
+          schema:
+            type: string
+      summary: Обновить книгу
+      tags:
+      - books
+  /book/{id}:
+    get:
+      description: Получить книгу по айди
+      parameters:
+      - description: Book id
+        in: path
+        name: Book_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Book'
+        "400":
+          description: Missing book ID
+          schema:
+            type: string
+        "500":
+          description: Error while trying to find book or Failed to encode book data
+          schema:
+            type: string
+      summary: Получить книгу по айди
+      tags:
+      - books
+  /books:
+    get:
+      description: Получить
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Book'
+            type: array
+        "500":
+          description: Error while trying to find books or Failed to encode book data
+          schema:
+            type: string
+      summary: Получить все книги
+      tags:
+      - books
+    post:
+      consumes:
+      - application/json
+      description: Добавить книгу в БД
+      parameters:
+      - description: Add book
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/models.AddBook'
+      responses:
+        "201":
+          description: Book created successfully
+          schema:
+            type: string
+        "400":
+          description: Failed to decode book data
+          schema:
+            type: string
+        "500":
+          description: Error data
+          schema:
+            type: string
+      summary: Добавить книгу
+      tags:
+      - books
+swagger: "2.0"
